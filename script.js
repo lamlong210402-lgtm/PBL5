@@ -116,79 +116,68 @@ function escapeAttr(s){return String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'"
 document.addEventListener("DOMContentLoaded", () => {
 
     const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-    const mobileOverlay = document.getElementById("mobileOverlay");
+    const sidebarOverlay = document.getElementById("sidebarOverlay");
     const sidebar = document.querySelector(".sidebar");
 
-    // Neu khong tim thay cac thanh phan mobile thi dung
-    if (!mobileMenuBtn || !sidebar) return;
+    if (!mobileMenuBtn || !sidebar) {
+        console.error("Khong tim thay thanh phan mobile menu");
+        return;
+    }
 
     function openMobileMenu() {
-        document.body.classList.add("mobile-menu-open");
+        sidebar.classList.add("mobile-open");
 
-        mobileMenuBtn.classList.add("active");
-        mobileMenuBtn.setAttribute("aria-expanded", "true");
-
-        // Doi icon 3 gach thanh X
-        const spans = mobileMenuBtn.querySelectorAll("span");
-
-        if (spans.length === 3) {
-            spans[0].style.transform = "rotate(45deg) translate(5px, 5px)";
-            spans[1].style.opacity = "0";
-            spans[2].style.transform = "rotate(-45deg) translate(5px, -5px)";
+        if (sidebarOverlay) {
+            sidebarOverlay.classList.add("show");
         }
+
+        mobileMenuBtn.innerHTML = "✕";
+        mobileMenuBtn.setAttribute("aria-expanded", "true");
     }
 
     function closeMobileMenu() {
-        document.body.classList.remove("mobile-menu-open");
+        sidebar.classList.remove("mobile-open");
 
-        mobileMenuBtn.classList.remove("active");
-        mobileMenuBtn.setAttribute("aria-expanded", "false");
-
-        // Tra lai icon 3 gach
-        const spans = mobileMenuBtn.querySelectorAll("span");
-
-        if (spans.length === 3) {
-            spans[0].style.transform = "";
-            spans[1].style.opacity = "";
-            spans[2].style.transform = "";
+        if (sidebarOverlay) {
+            sidebarOverlay.classList.remove("show");
         }
+
+        mobileMenuBtn.innerHTML = "☰";
+        mobileMenuBtn.setAttribute("aria-expanded", "false");
     }
 
-    function toggleMobileMenu() {
-        if (document.body.classList.contains("mobile-menu-open")) {
+    mobileMenuBtn.addEventListener("click", () => {
+        if (sidebar.classList.contains("mobile-open")) {
             closeMobileMenu();
         } else {
             openMobileMenu();
         }
+    });
+
+    // Bam ra ngoai menu
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener("click", closeMobileMenu);
     }
 
-    // Nut 3 gach
-    mobileMenuBtn.addEventListener("click", toggleMobileMenu);
-
-    // Bam ra ngoai sidebar
-    if (mobileOverlay) {
-        mobileOverlay.addEventListener("click", closeMobileMenu);
-    }
-
-    // Bam vao menu -> chuyen trang + dong sidebar
+    // Chon muc trong sidebar
     document.querySelectorAll(".nav-btn").forEach(button => {
         button.addEventListener("click", () => {
-            if (window.innerWidth <= 768) {
+            if (window.innerWidth <= 650) {
                 closeMobileMenu();
             }
         });
     });
 
-    // Nhan ESC de dong menu
+    // Nhan ESC de dong
     document.addEventListener("keydown", event => {
         if (event.key === "Escape") {
             closeMobileMenu();
         }
     });
 
-    // Neu dang mo menu ma chuyen sang PC
+    // Chuyen tu dien thoai sang PC
     window.addEventListener("resize", () => {
-        if (window.innerWidth > 768) {
+        if (window.innerWidth > 650) {
             closeMobileMenu();
         }
     });
