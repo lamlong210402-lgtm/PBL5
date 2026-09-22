@@ -109,3 +109,49 @@ function formatDate(d){if(!d)return"--";return new Date(d+"T00:00:00").toLocaleD
 function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.style.display="block";setTimeout(()=>el.style.display="none",2200)}
 function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
 function escapeAttr(s){return String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'")}
+// =========================
+// MOBILE MENU
+// =========================
+
+const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+const mobileOverlay = document.getElementById("mobileOverlay");
+
+function closeMobileMenu() {
+    document.body.classList.remove("mobile-menu-open");
+    
+    if (mobileMenuBtn) {
+        mobileMenuBtn.classList.remove("active");
+    }
+}
+
+function toggleMobileMenu() {
+    document.body.classList.toggle("mobile-menu-open");
+    
+    if (mobileMenuBtn) {
+        mobileMenuBtn.classList.toggle("active");
+    }
+}
+
+if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener("click", toggleMobileMenu);
+}
+
+if (mobileOverlay) {
+    mobileOverlay.addEventListener("click", closeMobileMenu);
+}
+
+/* Chon menu xong thi tu dong dong sidebar tren dien thoai */
+document.querySelectorAll(".nav-btn").forEach(button => {
+    button.addEventListener("click", () => {
+        if (window.innerWidth <= 768) {
+            closeMobileMenu();
+        }
+    });
+});
+
+/* Neu xoay/man hinh thay doi kich thuoc */
+window.addEventListener("resize", () => {
+    if (window.innerWidth > 768) {
+        closeMobileMenu();
+    }
+});
