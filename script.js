@@ -116,70 +116,69 @@ function escapeAttr(s){return String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'"
 document.addEventListener("DOMContentLoaded", () => {
 
     const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-    const sidebarOverlay = document.getElementById("sidebarOverlay");
-    const sidebar = document.querySelector(".sidebar");
+    const mobileOverlay = document.getElementById("mobileOverlay");
 
-    if (!mobileMenuBtn || !sidebar) {
-        console.error("Khong tim thay thanh phan mobile menu");
+    if (!mobileMenuBtn) {
+        console.error("Khong tim thay mobileMenuBtn");
         return;
     }
 
     function openMobileMenu() {
-        sidebar.classList.add("mobile-open");
-
-        if (sidebarOverlay) {
-            sidebarOverlay.classList.add("show");
-        }
-
-        mobileMenuBtn.innerHTML = "✕";
+        document.body.classList.add("mobile-menu-open");
+        mobileMenuBtn.classList.add("active");
         mobileMenuBtn.setAttribute("aria-expanded", "true");
     }
 
     function closeMobileMenu() {
-        sidebar.classList.remove("mobile-open");
-
-        if (sidebarOverlay) {
-            sidebarOverlay.classList.remove("show");
-        }
-
-        mobileMenuBtn.innerHTML = "☰";
+        document.body.classList.remove("mobile-menu-open");
+        mobileMenuBtn.classList.remove("active");
         mobileMenuBtn.setAttribute("aria-expanded", "false");
     }
 
-    mobileMenuBtn.addEventListener("click", () => {
-        if (sidebar.classList.contains("mobile-open")) {
+    mobileMenuBtn.addEventListener("click", function () {
+
+        if (document.body.classList.contains("mobile-menu-open")) {
             closeMobileMenu();
         } else {
             openMobileMenu();
         }
+
     });
 
-    // Bam ra ngoai menu
-    if (sidebarOverlay) {
-        sidebarOverlay.addEventListener("click", closeMobileMenu);
+    // Bam lop nen de dong menu
+    if (mobileOverlay) {
+        mobileOverlay.addEventListener("click", closeMobileMenu);
     }
 
-    // Chon muc trong sidebar
+    // Bam vao muc menu -> dong sidebar
     document.querySelectorAll(".nav-btn").forEach(button => {
-        button.addEventListener("click", () => {
+
+        button.addEventListener("click", function () {
+
             if (window.innerWidth <= 650) {
                 closeMobileMenu();
             }
+
         });
+
     });
 
-    // Nhan ESC de dong
-    document.addEventListener("keydown", event => {
+    // Bam ESC de dong
+    document.addEventListener("keydown", function(event) {
+
         if (event.key === "Escape") {
             closeMobileMenu();
         }
+
     });
 
-    // Chuyen tu dien thoai sang PC
-    window.addEventListener("resize", () => {
+    // Neu quay lai man hinh PC
+    window.addEventListener("resize", function() {
+
         if (window.innerWidth > 650) {
             closeMobileMenu();
         }
+
     });
 
 });
